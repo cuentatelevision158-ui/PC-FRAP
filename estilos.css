@@ -363,3 +363,22 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 .mk circle{stroke-linecap:round}.mk{filter:drop-shadow(0 2px 3px #0008);transition:transform .15s}.mk:hover{filter:drop-shadow(0 2px 5px #000b)}
 .mk .mk-ab{display:none}
 @keyframes marcar{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+
+/* ===== Sirena del encabezado: azul y naranja, mientras hay un servicio en curso ===== */
+.banner.sirena{position:relative;overflow:hidden;animation:sirBorde 1.6s steps(1,end) infinite}
+.banner.sirena>*{position:relative;z-index:2}
+.banner.sirena::before,.banner.sirena::after{content:"";position:absolute;top:-30%;bottom:-30%;width:62%;z-index:1;pointer-events:none;opacity:0}
+.banner.sirena::before{left:-14%;background:radial-gradient(ellipse 66% 60% at 20% 50%,#e3f0ff 0,#6fb0ff 22%,#2f80ffe6 42%,#1f6bff88 60%,transparent 78%);animation:sirAzul 1.6s steps(1,end) infinite}
+.banner.sirena::after{right:-14%;background:radial-gradient(ellipse 66% 60% at 80% 50%,#ffc069 0,#ff8a1ae6 30%,#ff7a0088 52%,transparent 74%);animation:sirNaranja 1.6s steps(1,end) infinite}
+@keyframes sirAzul{0%{opacity:1}9%{opacity:.08}18%{opacity:1}27%{opacity:.08}36%{opacity:1}45%,100%{opacity:0}}
+@keyframes sirNaranja{0%,50%{opacity:0}54%{opacity:1}63%{opacity:.08}72%{opacity:1}81%{opacity:.08}90%{opacity:1}99%,100%{opacity:0}}
+@keyframes sirBorde{0%{box-shadow:0 0 0 2px #4d9bff,0 0 34px 6px #1f6bffaa,0 10px 30px #0006}45%{box-shadow:0 0 0 2px #ffffff22,0 10px 30px #0006}50%{box-shadow:0 0 0 2px #ff9a2e,0 0 34px 6px #ff7a00aa,0 10px 30px #0006}95%{box-shadow:0 0 0 2px #ffffff22,0 10px 30px #0006}}
+.en-serv{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:11px;letter-spacing:.18em;color:#fff;background:#ffffff1f;border:1px solid #ffffff44;border-radius:999px;padding:6px 12px 6px 10px}
+.en-serv[hidden]{display:none}
+.en-serv::before{content:"";width:9px;height:9px;border-radius:50%;background:#4d9bff;box-shadow:0 0 10px 2px #4d9bff;animation:sirPunto 1.6s steps(1,end) infinite}
+@keyframes sirPunto{0%{background:#4d9bff;box-shadow:0 0 10px 2px #4d9bff}50%{background:#ff9a2e;box-shadow:0 0 10px 2px #ff9a2e}}
+@media(prefers-reduced-motion:reduce){
+  .banner.sirena,.banner.sirena::before,.banner.sirena::after,.en-serv::before{animation:none}
+  .banner.sirena{box-shadow:0 0 0 2px #4d9bff,0 0 24px 4px #ff7a0088}
+  .banner.sirena::before{opacity:.55}.banner.sirena::after{opacity:.55}
+}

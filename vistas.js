@@ -116,11 +116,18 @@ function htmlTiles() {
 }
 function htmlReloj() { const d = new Date(); return `${DIAS[d.getDay()]}, ${d.getDate()} de ${MESES_L[d.getMonth()]} de ${d.getFullYear()} <i>|</i> <b>${p2(d.getHours())}:${p2(d.getMinutes())}</b>`; }
 function pintarApp() {
-  $('#app').innerHTML = `<div class="banner"><div class="b-izq">${marca()}<p class="lema">Sistema Integral de Registro de Atención Prehospitalaria</p><div class="b-pie"><div class="sync" id="sync"></div><div class="reloj-g" id="relojG">${htmlReloj()}</div></div></div><div class="b-der"><button type="button" class="btn blanco ch" id="btnInst" ${_instalar ? '' : 'hidden'}>⬇ Instalar app</button><button type="button" class="usr" data-act="cuenta"><span class="av" style="background:${colorDe(S.user.nombre)}">${esc(iniciales(S.user.nombre))}</span><span><b>${esc(S.user.nombre)}</b><small>${ROLES[S.user.rol].n}</small></span></button></div></div>
+  $('#app').innerHTML = `<div class="banner"><div class="b-izq">${marca()}<p class="lema">Sistema Integral de Registro de Atención Prehospitalaria</p><div class="b-pie"><span class="en-serv" id="enServ" hidden>SERVICIO EN CURSO</span><div class="sync" id="sync"></div><div class="reloj-g" id="relojG">${htmlReloj()}</div></div></div><div class="b-der"><button type="button" class="btn blanco ch" id="btnInst" ${_instalar ? '' : 'hidden'}>⬇ Instalar app</button><button type="button" class="usr" data-act="cuenta"><span class="av" style="background:${colorDe(S.user.nombre)}">${esc(iniciales(S.user.nombre))}</span><span><b>${esc(S.user.nombre)}</b><small>${ROLES[S.user.rol].n}</small></span></button></div></div>
     <div class="tiles-h" id="tilesH">${htmlTiles()}</div><div id="fichaU">${htmlFicha()}</div><main id="form"></main>
     <div id="panel" class="panel" hidden></div>
     <button type="button" id="flot" class="flot" data-act="avance" title="Guardar avance"><svg viewBox="0 0 60 60" aria-hidden="true"><g fill="#2f6fe4" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"><rect x="25" y="3" width="10" height="54" rx="3"/><rect x="25" y="3" width="10" height="54" rx="3" transform="rotate(60 30 30)"/><rect x="25" y="3" width="10" height="54" rx="3" transform="rotate(120 30 30)"/></g></svg><b>0%</b><span>GUARDAR<br>AVANCE</span></button>`;
-  pintarSync(); animarNumeros(); if (typeof pintarProgreso === 'function' && F) pintarProgreso();
+  pintarSync(); animarNumeros(); if (typeof pintarProgreso === 'function' && F) pintarProgreso(); sirena();
+}
+/* Sirena del encabezado: se enciende (azul y naranja) mientras hay un servicio en curso, o sea, con la llamada registrada y sin llegar a base */
+function sirena() {
+  const b = $('.banner'); if (!b) return;
+  const activo = !!(typeof F !== 'undefined' && F && F.t_llamada && !F.t_base);
+  b.classList.toggle('sirena', activo);
+  const t = $('#enServ'); if (t) t.hidden = !activo;
 }
 let _prevTiles = [];
 function animarNumeros() {
@@ -133,7 +140,7 @@ function actualizarInicio() {
   const a = $('#tilesH'); if (a) { a.innerHTML = htmlTiles(); animarNumeros(); }
   const f = $('#fichaU'); if (f) f.innerHTML = htmlFicha();
   const r = $('#relojG'); if (r) r.innerHTML = htmlReloj();
-  pintarSync();
+  pintarSync(); sirena();
 }
 function refrescarVistas() { actualizarInicio(); if (PANEL) pintarPanel(); }
 

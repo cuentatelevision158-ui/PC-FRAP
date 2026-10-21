@@ -329,6 +329,7 @@ function pintarProgreso() {
   const g = $('#gcs-out'); if (g) g.innerHTML = htmlGlasgowResumen();
 }
 function pintarFormulario() {
+  sirena();
   setTimeout(pintarProgreso, 0);
   const root = $('#form'); if (!root) return;
   root.innerHTML = `<nav class="tabs" id="tabs">${htmlTabs()}</nav>` + SECCIONES.map(htmlSeccion).join('') + htmlBarra();
@@ -564,6 +565,7 @@ function empezarNuevo() {
   LS.del('borrador:' + S.user.id);
 }
 function actualizarTiempos() {
+  sirena();
   const tl = $('#tl'); if (!tl) return;
   const tmp = document.createElement('div'); tmp.innerHTML = htmlTiempos(F);
   const a = tl.querySelector('.ruta'), b = tmp.querySelector('.ruta'); if (!a) { tl.innerHTML = tmp.innerHTML; return; }
