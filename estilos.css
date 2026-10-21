@@ -399,3 +399,6 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 .b-der .btn-sinc{height:44px;padding:0 16px 0 12px;gap:8px;box-shadow:0 4px 12px #0005}
 .b-der .btn-sinc i{font-size:20px}.b-der .btn-sinc span{font-size:9.5px}
 .flot-g{gap:0}
+
+/* barra de acciones (Guardar sesión, Cerrar, PDF, Compartir, Nuevo): fija al final del formulario, ya no flota sobre la pantalla */
+.barra{position:static;bottom:auto;backdrop-filter:none;background:linear-gradient(135deg,#0b2a63,#0b1f4d);margin:18px 0 190px;z-index:auto}
