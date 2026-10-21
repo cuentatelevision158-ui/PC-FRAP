@@ -452,3 +452,8 @@ mark.pend{background:#ffe9b8;color:#8a4b00;padding:0 4px;border-radius:4px;font-
 /* ===== mapa con autorización ===== */
 .mapa-ph{display:grid;place-items:center;gap:10px;text-align:center;padding:18px;min-height:140px}
 .mapa-ph p{margin:0;font-size:12.5px;color:#4a5a78;max-width:380px}
+
+/* ===== negativa de atención / traslado ===== */
+.neg{border:2px solid #143a8f;border-radius:14px;padding:12px 14px;background:#f6f9ff}
+.neg-h{text-align:center;color:#143a8f;margin-bottom:8px}.neg-h b{display:block;font-size:14px;letter-spacing:.02em}.neg-h span{display:block;font-size:12px;font-weight:800;text-decoration:underline}
+.neg p{margin:0;font-size:13.5px;line-height:1.5;text-align:justify}.neg small{display:block;margin-top:8px;color:#5b6b8a;font-size:11.5px}
