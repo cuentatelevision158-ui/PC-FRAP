@@ -193,6 +193,7 @@ const Datos = {
       if (full) {
         const filas = await traerTodo(`/rest/v1/frap_registros?select=${COLS}&order=creado_en.asc,id.asc`);
         const mapa = new Map(S.regs.map(r => [r.id, r]));
+        filas.forEach(f => { const o = mapa.get(f.id); if (o && o.actualizado_en !== f.actualizado_en && !pend.has(f.id)) delete S.dc[f.id]; }); // otro equipo lo cambió: la copia guardada ya no vale
         const nuevos = filas.map(f => pend.has(f.id) && mapa.get(f.id) ? mapa.get(f.id) : { ...norm(f), _nube: true });
         S.regs.filter(r => pend.has(r.id) && !filas.some(f => f.id === r.id)).forEach(r => nuevos.push(r)); // aún sin subir
         S.regs = nuevos;

@@ -119,7 +119,8 @@ function pintarApp() {
   $('#app').innerHTML = `<div class="banner"><div class="b-izq">${marca()}<p class="lema">Sistema Integral de Registro de Atención Prehospitalaria</p><div class="b-pie"><span class="en-serv" id="enServ" hidden>SERVICIO EN CURSO</span><div class="sync" id="sync"></div><div class="reloj-g" id="relojG">${htmlReloj()}</div></div></div><div class="b-der"><button type="button" class="btn blanco ch" id="btnInst" ${_instalar ? '' : 'hidden'}>⬇ Instalar app</button><button type="button" class="usr" data-act="cuenta"><span class="av" style="background:${colorDe(S.user.nombre)}">${esc(iniciales(S.user.nombre))}</span><span><b>${esc(S.user.nombre)}</b><small>${ROLES[S.user.rol].n}</small></span></button></div></div>
     <div class="tiles-h" id="tilesH">${htmlTiles()}</div><div id="fichaU">${htmlFicha()}</div><main id="form"></main>
     <div id="panel" class="panel" hidden></div>
-    <button type="button" id="flot" class="flot" data-act="avance" title="Guardar avance"><svg viewBox="0 0 60 60" aria-hidden="true"><g fill="#2f6fe4" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"><rect x="25" y="3" width="10" height="54" rx="3"/><rect x="25" y="3" width="10" height="54" rx="3" transform="rotate(60 30 30)"/><rect x="25" y="3" width="10" height="54" rx="3" transform="rotate(120 30 30)"/></g></svg><b>0%</b><span>GUARDAR<br>AVANCE</span></button>`;
+    <div class="flot-g"><button type="button" id="btnSinc" class="btn-sinc" data-act="sincronizar" title="Traer lo que se guardó desde los teléfonos"><i>⟳</i><span>SINCRONIZAR<br>CON TELÉFONO</span></button>
+    <button type="button" id="flot" class="flot" data-act="avance" title="Guardar avance"><svg viewBox="0 0 60 60" aria-hidden="true"><g fill="#2f6fe4" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"><rect x="25" y="3" width="10" height="54" rx="3"/><rect x="25" y="3" width="10" height="54" rx="3" transform="rotate(60 30 30)"/><rect x="25" y="3" width="10" height="54" rx="3" transform="rotate(120 30 30)"/></g></svg><b>0%</b><span>GUARDAR<br>AVANCE</span></button></div>`;
   pintarSync(); animarNumeros(); if (typeof pintarProgreso === 'function' && F) pintarProgreso(); sirena();
 }
 /* Sirena del encabezado: se enciende (azul y naranja) mientras hay un servicio en curso, o sea, con la llamada registrada y sin llegar a base */
@@ -141,6 +142,17 @@ function actualizarInicio() {
   const f = $('#fichaU'); if (f) f.innerHTML = htmlFicha();
   const r = $('#relojG'); if (r) r.innerHTML = htmlReloj();
   pintarSync(); sirena();
+}
+/* Botón «Sincronizar con teléfono» (escritorio): trae al instante lo que el personal registró desde los celulares */
+async function sincronizarAhora() {
+  if (!NUBE) { toast('Sin la nube no hay teléfonos con quién sincronizar'); return; }
+  if (!navigator.onLine) { toast('Sin internet por ahora'); return; }
+  const b = $('#btnSinc'); if (b) b.classList.add('sincronizando');
+  try {
+    await Datos.sincronizar(true); refrescarVistas(); await vigilarOtroDispositivo();
+    toast(`☁ Sincronizado con los teléfonos · ${horaAhora()}`);
+  } catch (e) { toast('No se pudo sincronizar: ' + e.message, 5000); }
+  finally { if (b) b.classList.remove('sincronizando'); }
 }
 function refrescarVistas() { actualizarInicio(); if (PANEL) pintarPanel(); }
 
@@ -399,6 +411,7 @@ function manejarGlobal(e) {
   switch (a.dataset.act) {
     case 'cerrarPanel': cerrarPaneles(); break;
     case 'avance': guardarAvance(); break;
+    case 'sincronizar': sincronizarAhora(); break;
     case 'fichaVer': FICHA_ABIERTA = !FICHA_ABIERTA; actualizarInicio(); break;
     case 'fichaEditar': editarFicha(); break;
     case 'cuenta': miCuenta(); break;

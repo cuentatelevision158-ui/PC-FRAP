@@ -382,3 +382,15 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
   .banner.sirena{box-shadow:0 0 0 2px #4d9bff,0 0 24px 4px #ff7a0088}
   .banner.sirena::before{opacity:.55}.banner.sirena::after{opacity:.55}
 }
+
+/* ===== Botón «Sincronizar con teléfono» junto a «Guardar avance» (solo escritorio) ===== */
+.flot-g{position:fixed;right:14px;bottom:128px;z-index:25;display:flex;align-items:center;gap:10px}
+.flot-g .flot{position:relative;right:auto!important;bottom:auto!important}
+.btn-sinc{display:none;align-items:center;gap:10px;height:54px;padding:0 20px 0 14px;border-radius:30px;border:1px solid #ffffff44;color:#fff;cursor:pointer;
+  background:linear-gradient(#f58220,#d9650b);box-shadow:0 8px 20px #0007;transition:transform .15s,filter .15s}
+.btn-sinc:hover{filter:brightness(1.08)}.btn-sinc:active{transform:scale(.95)}
+.btn-sinc i{font-style:normal;font-size:24px;line-height:1;display:inline-block}
+.btn-sinc span{font-size:10px;font-weight:800;letter-spacing:.07em;text-align:left;line-height:1.15}
+.btn-sinc.sincronizando i{animation:giro .9s linear infinite}.btn-sinc.sincronizando{pointer-events:none;filter:saturate(.7)}
+@media(min-width:761px){.btn-sinc{display:flex}}
+@media(max-width:760px){.flot-g{right:8px;bottom:150px}}
