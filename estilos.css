@@ -394,3 +394,8 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 .btn-sinc.sincronizando i{animation:giro .9s linear infinite}.btn-sinc.sincronizando{pointer-events:none;filter:saturate(.7)}
 @media(min-width:761px){.btn-sinc{display:flex}}
 @media(max-width:760px){.flot-g{right:8px;bottom:150px}}
+
+/* sincronizar: ahora en el encabezado, junto al usuario (no estorba abajo) */
+.b-der .btn-sinc{height:44px;padding:0 16px 0 12px;gap:8px;box-shadow:0 4px 12px #0005}
+.b-der .btn-sinc i{font-size:20px}.b-der .btn-sinc span{font-size:9.5px}
+.flot-g{gap:0}
