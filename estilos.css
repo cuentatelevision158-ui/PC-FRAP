@@ -421,3 +421,13 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 .lic-d{text-align:center;font-size:12px;color:#5b6b8a;margin:4px 0 10px}
 .lic-msg{min-height:20px;text-align:center;color:#c0392b;font-size:13px;margin:8px 0 0}
 .lic-pie{font-size:10.5px;color:#7a89a6;text-align:center;margin-top:16px}
+
+/* ===== equipos autorizados ===== */
+.eq-d{margin:6px 0 14px}
+.eqs .eq{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #0001}
+.eqs .eq b{font-size:13px}.eqs .eq small{display:block;color:#5b6b8a;font-size:11.5px;margin-top:2px}
+.eqs .eq.pendiente{background:#fff7e6;margin:0 -8px;padding:9px 8px;border-radius:10px}
+.eqs .eq.revocado{opacity:.6}
+.eqs .eq-b{display:flex;gap:10px;flex:none}.eqs .lnk.ok{color:#16803c;font-weight:800}
+.eq-n{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:10px;background:#f58220;color:#fff;font-size:11px;padding:0 6px;margin-left:6px}
+.tile-h .eq-aviso{color:#c25d00!important;font-weight:800;font-style:normal}
