@@ -1,5 +1,5 @@
 {
-  "name": "SIRAP — Protección Civil Ixhuatlán del Café",
+  "name": "SIRAP",
   "short_name": "SIRAP",
   "description": "Sistema Integral de Registro de Atención Prehospitalaria: captura en campo, PDF clínico y expediente central",
   "start_url": "./index.html",
