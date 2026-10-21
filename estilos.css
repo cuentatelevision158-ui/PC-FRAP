@@ -402,3 +402,11 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 
 /* barra de acciones (Guardar sesión, Cerrar, PDF, Compartir, Nuevo): fija al final del formulario, ya no flota sobre la pantalla */
 .barra{position:static;bottom:auto;backdrop-filter:none;background:linear-gradient(135deg,#0b2a63,#0b1f4d);margin:18px 0 190px;z-index:auto}
+
+/* ===== logos: el de la app en celular y el de escritorio en computadora ===== */
+.marca .m-app{display:flex;align-items:center;gap:12px}
+.marca .m-esc{display:none}
+.marca .estrella.logo-app{width:62px;height:62px;border-radius:16px;object-fit:contain;box-shadow:0 4px 12px #0006;animation:none;filter:none}
+.logo-esc{display:block;height:96px;width:auto;background:#fff;border-radius:16px;padding:8px 16px;box-shadow:0 6px 18px #0005}
+@media(min-width:761px){.marca .m-app:not(.solo){display:none}.marca .m-esc{display:block}}
+@media(min-width:761px){.login-izq .logo-esc{height:92px}}

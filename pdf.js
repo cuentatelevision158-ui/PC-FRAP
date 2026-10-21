@@ -8,6 +8,7 @@ const DERIV = { hospital: 'Traslado a hospital', hogar: 'Se queda en su hogar', 
 
 /* marca SIRAP dibujada con vectores (escudo, montaña, pulso) */
 function marcaPDF(doc, x, y, t) {
+  if (window.LOGO_APP) { try { doc.addImage(window.LOGO_APP, 'PNG', x, y, t, t); return; } catch (e) { } }
   const k = t / 64, P = (a, b) => [x + a * k, y + b * k];
   const poli = (pts, estilo) => { const q = pts.map(p => P(...p)); doc.lines(q.slice(1).map((p, i) => [p[0] - q[i][0], p[1] - q[i][1]]), q[0][0], q[0][1], [1, 1], estilo, true); };
   doc.setLineWidth(1.2); doc.setDrawColor(255, 255, 255); doc.setFillColor(29, 74, 168);
