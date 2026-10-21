@@ -431,3 +431,14 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 .eqs .eq-b{display:flex;gap:10px;flex:none}.eqs .lnk.ok{color:#16803c;font-weight:800}
 .eq-n{display:inline-grid;place-items:center;min-width:20px;height:20px;border-radius:10px;background:#f58220;color:#fff;font-size:11px;padding:0 6px;margin-left:6px}
 .tile-h .eq-aviso{color:#c25d00!important;font-weight:800;font-style:normal}
+
+/* ===== aviso de privacidad ===== */
+.lnk-priv{font-size:11px;color:#9fc0ff;text-decoration:underline;cursor:pointer}.lnk-priv:hover{color:#fff}
+.aviso-t{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chip-t{border:1px solid #c9d4ea;background:#fff;color:#143a8f;border-radius:999px;padding:6px 14px;font-weight:700;font-size:12.5px;cursor:pointer}
+.chip-t.on{background:#143a8f;color:#fff;border-color:#143a8f}
+.aviso-c{max-height:56vh;overflow:auto;padding-right:4px;font-size:13px;line-height:1.5}
+.aviso-c h4{margin:14px 0 4px;color:#143a8f;font-size:14px}.aviso-c h4:first-child{margin-top:0}
+.aviso-c p{margin:4px 0}.aviso-c ul{margin:4px 0 6px 18px;padding:0}.aviso-c li{margin:3px 0}
+mark.pend{background:#ffe9b8;color:#8a4b00;padding:0 4px;border-radius:4px;font-weight:700}
+.aviso-f{border:1px solid #f5b25e;background:#fff8ec}
