@@ -442,3 +442,9 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 .aviso-c p{margin:4px 0}.aviso-c ul{margin:4px 0 6px 18px;padding:0}.aviso-c li{margin:3px 0}
 mark.pend{background:#ffe9b8;color:#8a4b00;padding:0 4px;border-radius:4px;font-weight:700}
 .aviso-f{border:1px solid #f5b25e;background:#fff8ec}
+
+/* ===== compartir ===== */
+.comp-op{display:block;width:100%;text-align:left;border:1.5px solid #c9d4ea;background:#fff;border-radius:14px;padding:12px 14px;margin:8px 0;cursor:pointer;font:inherit}
+.comp-op b{display:block;color:#143a8f;font-size:14.5px}.comp-op small{display:block;color:#5b6b8a;font-size:12px;margin-top:3px}
+.comp-op:hover:not(.bloq){border-color:#143a8f;background:#f3f7ff}
+.comp-op.bloq{opacity:.55;cursor:not-allowed;background:#f4f6fa}.comp-op.bloq em{color:#a65a00;font-style:normal;font-weight:700}
