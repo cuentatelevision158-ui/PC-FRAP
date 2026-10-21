@@ -212,11 +212,22 @@ function dibujarCuerpoPDF(doc, f, M, getY, setY, salto, CW) {
   setY(y + alto + 22);
 }
 
+/* En la app Android (Capacitor) no existe la descarga del navegador: el archivo se escribe en la caché del teléfono y se abre el menú de compartir/guardar */
+const NATIVO = () => !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+async function entregarArchivo(blob, nombre, texto, titulo) {
+  if (!NATIVO()) return false;
+  const { Filesystem, Share } = window.Capacitor.Plugins;
+  const b64 = await new Promise((ok, mal) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = mal; r.readAsDataURL(blob); });
+  const w = await Filesystem.writeFile({ path: nombre, data: b64, directory: 'CACHE' });
+  try { await Share.share({ title: titulo || nombre, text: texto || undefined, url: w.uri, dialogTitle: 'Guardar o compartir' }); } catch (e) { if (!/cancel/i.test(e.message || '')) throw e; }
+  return true;
+}
+async function guardarPDF(doc, nombre) { if (!(await entregarArchivo(doc.output('blob'), nombre))) doc.save(nombre); }
 function nombreArchivo(rec) { return (rec?.folio || 'FRAP') + (F?.pac_nombre ? '_' + F.pac_nombre.replace(/[^\w\-]+/g, '_').slice(0, 24) : '') + '.pdf'; }
-function generarPDF() {
+async function generarPDF() {
   if (!window.jspdf) { toast('No cargó el generador de PDF'); return; }
   try {
-    const doc = construirPDF(F, REC); doc.save(nombreArchivo(REC)); Datos.log('Generó PDF', REC?.folio || '');
+    const doc = construirPDF(F, REC); await guardarPDF(doc, nombreArchivo(REC)); Datos.log('Generó PDF', REC?.folio || '');
   } catch (e) { console.error(e); toast('No se pudo generar el PDF: ' + e.message, 6000); }
 }
 function resumenTexto(f, rec) {
@@ -235,12 +246,16 @@ function resumenTexto(f, rec) {
   return l.join('\n');
 }
 async function compartirTexto(texto, titulo) {
+  if (NATIVO()) { try { await window.Capacitor.Plugins.Share.share({ title: titulo || 'FRAP', text: texto, dialogTitle: 'Compartir' }); } catch (e) { } return; }
   try { if (navigator.share) { await navigator.share({ title: titulo || 'FRAP', text: texto }); return; } } catch (e) { if (e.name === 'AbortError') return; }
   try { await navigator.clipboard.writeText(texto); toast('Resumen copiado: péguelo donde quiera compartirlo'); } catch (e) { window.open('https://wa.me/?text=' + enc(texto), '_blank', 'noopener'); }
 }
 async function compartirFRAP() {
   const txt = resumenTexto(F, REC);
   Datos.log('Compartió resumen', REC?.folio || '');
+  if (NATIVO() && can('pdf') && window.jspdf) {
+    try { await entregarArchivo(construirPDF(F, REC).output('blob'), nombreArchivo(REC), txt, 'FRAP ' + (REC?.folio || '')); return; } catch (e) { console.error(e); }
+  }
   if (can('pdf') && window.jspdf && navigator.canShare) {
     try {
       const doc = construirPDF(F, REC); const blob = doc.output('blob'); const file = new File([blob], nombreArchivo(REC), { type: 'application/pdf' });
@@ -255,5 +270,7 @@ function exportarExcel(filas, nombre) {
   const cab = ['Folio', 'Fecha', 'Hora llamada', 'Unidad', 'Paramédico', 'Motivo', 'Paciente', 'Edad', 'Sexo', 'Prioridad', 'Derivación', 'Hospital', 'Respuesta (min)', 'Alertas', 'Estatus'];
   const tr = r => `<tr>${[r.folio, r.fecha, r.hora_llamada, r.unidad, r.autor, r.motivo, r.paciente, r.edad, r.sexo, r.prioridad, DERIV[r.derivacion] || '', r.hospital, r.resp_min, r.alertas, r.estatus].map(v => `<td>${esc(v ?? '')}</td>`).join('')}</tr>`;
   const html = `<html xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="utf-8"></head><body><table border="1"><tr>${cab.map(c => `<th style="background:#0b1f4d;color:#fff">${c}</th>`).join('')}</tr>${filas.map(tr).join('')}</table></body></html>`;
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + html], { type: 'application/vnd.ms-excel;charset=utf-8' })); a.download = nombre; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  const blob = new Blob(['﻿' + html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+  if (NATIVO()) { entregarArchivo(blob, nombre).catch(e => toast('No se pudo exportar: ' + e.message)); return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nombre; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
 }

@@ -261,7 +261,7 @@ async function verDetalle(id) {
   let d = null; try { d = await Datos.abrir(id); } catch (e) { }
   const b = [['Cerrar', 'gris']];
   if (puedeAbrir) b.push([(propio ? can('corregir_propios') : can('corregir_otros')) ? '✎ Abrir para corregir' : '👁 Abrir (solo lectura)', 'azul', () => { abrirFRAP(id); }]);
-  if (can('pdf') && d) b.push(['📄 Generar FRAP PDF', 'azul2', () => { try { construirPDF(d, r).save((r.folio || 'FRAP') + '.pdf'); Datos.log('Generó PDF', r.folio || ''); } catch (e) { toast('No se pudo generar el PDF: ' + e.message); } return false; }]);
+  if (can('pdf') && d) b.push(['📄 Generar FRAP PDF', 'azul2', () => { try { guardarPDF(construirPDF(d, r), (r.folio || 'FRAP') + '.pdf').catch(e => toast('No se pudo generar el PDF: ' + e.message)); Datos.log('Generó PDF', r.folio || ''); } catch (e) { toast('No se pudo generar el PDF: ' + e.message); } return false; }]);
   if (can('compartir') && d) b.push(['📤 Compartir resumen', 'azul2', () => { compartirTexto(resumenTexto(d, r), 'FRAP ' + (r.folio || '')); return false; }]);
   if (can('corregir_otros') && r.estatus !== 'borrador') b.push([r.estatus === 'revisado' ? '↩ Quitar revisado' : '✔ Marcar revisado', 'verde', async () => { try { await Datos.marcarRevisado(id, r.estatus !== 'revisado'); Datos.log('Revisó un FRAP', r.folio || ''); pintarPanel(); actualizarInicio(); } catch (e) { toast('No se pudo: ' + e.message); } }]);
   if (can('eliminar')) b.push(['🗑 Eliminar', 'rojo', async () => { if (await confirmar('¿Eliminar este FRAP de forma definitiva?', 'Eliminar')) { try { await Datos.eliminar(id); Datos.log('Eliminó un FRAP', r.folio || ''); pintarPanel(); actualizarInicio(); } catch (e) { toast('No se pudo eliminar: ' + e.message); } } else return false; }]);
