@@ -448,3 +448,7 @@ mark.pend{background:#ffe9b8;color:#8a4b00;padding:0 4px;border-radius:4px;font-
 .comp-op b{display:block;color:#143a8f;font-size:14.5px}.comp-op small{display:block;color:#5b6b8a;font-size:12px;margin-top:3px}
 .comp-op:hover:not(.bloq){border-color:#143a8f;background:#f3f7ff}
 .comp-op.bloq{opacity:.55;cursor:not-allowed;background:#f4f6fa}.comp-op.bloq em{color:#a65a00;font-style:normal;font-weight:700}
+
+/* ===== mapa con autorización ===== */
+.mapa-ph{display:grid;place-items:center;gap:10px;text-align:center;padding:18px;min-height:140px}
+.mapa-ph p{margin:0;font-size:12.5px;color:#4a5a78;max-width:380px}
