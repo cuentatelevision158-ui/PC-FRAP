@@ -410,3 +410,14 @@ body{background:linear-gradient(180deg,#0c3178 0,#071d4a 55%,#051432 100%) fixed
 .logo-esc{display:block;height:96px;width:auto;background:#fff;border-radius:16px;padding:8px 16px;box-shadow:0 6px 18px #0005}
 @media(min-width:761px){.marca .m-app:not(.solo){display:none}.marca .m-esc{display:block}}
 @media(min-width:761px){.login-izq .logo-esc{height:92px}}
+
+/* ===== licencia ===== */
+.lic-ban{font-size:11px;color:#9fc0ff;letter-spacing:.02em}.lic-ban:empty{display:none}.lic-ban.aviso{color:#ffb15a;font-weight:700}
+.lic-pant{display:grid;place-items:center;min-height:100vh;padding:20px}
+.lic-caja{width:100%;max-width:480px;margin:0 auto;text-align:left}
+.lic-logo{display:flex;justify-content:center;margin-bottom:6px}.lic-logo .estrella{width:78px;height:78px}
+.lic-caja h2{text-align:center}.lic-caja .sub{text-align:center}
+.lic-caja textarea{width:100%;font:12px/1.35 ui-monospace,Consolas,monospace;border:0;outline:0;background:transparent;resize:vertical;color:inherit}
+.lic-d{text-align:center;font-size:12px;color:#5b6b8a;margin:4px 0 10px}
+.lic-msg{min-height:20px;text-align:center;color:#c0392b;font-size:13px;margin:8px 0 0}
+.lic-pie{font-size:10.5px;color:#7a89a6;text-align:center;margin-top:16px}
