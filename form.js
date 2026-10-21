@@ -698,7 +698,7 @@ async function guardarFRAP(cerrar) {
   if (cerrar) REC.estatus = 'cerrado'; else if (!REC.guardado) REC.estatus = 'borrador'; else if (REC.estatus === 'revisado') REC.estatus = 'cerrado';
   try {
     const res = await Datos.guardar(REC, F);
-    REC.guardado = true; REC.folio = res.rec.folio || REC.folio; SUCIO = false; guardarBorrador();
+    REC.guardado = true; REC.folio = res.rec.folio || REC.folio; REC.act = res.rec.actualizado_en; SUCIO = false; guardarBorrador();
     Datos.log(cerrar ? 'Cerró un FRAP' : 'Guardó un FRAP', (REC.folio || '') + (F.pac_nombre ? ' · ' + F.pac_nombre : ''));
     pintarFormulario(); actualizarInicio();
     const donde = NUBE ? (res.sincronizado ? 'quedó guardado en la nube' : 'quedó guardado en este equipo y se enviará al volver el internet') : 'quedó guardado en este equipo';
@@ -712,7 +712,7 @@ async function guardarAvance() {
   const fl = $('#flot'); if (fl) fl.classList.add('guardando');
   try {
     const res = await Datos.guardar(REC, F);
-    REC.guardado = true; REC.folio = res.rec.folio || REC.folio; SUCIO = false; guardarBorrador();
+    REC.guardado = true; REC.folio = res.rec.folio || REC.folio; REC.act = res.rec.actualizado_en; SUCIO = false; guardarBorrador();
     const fo = $('.x-folio'); if (fo) fo.innerHTML = CUSTOM.folio(F);
     pintarProgreso(); actualizarInicio();
     Datos.log('Guardó avance', (REC.folio || '') + (F.pac_nombre ? ' · ' + F.pac_nombre : ''));
@@ -725,13 +725,49 @@ async function nuevoFRAP() {
   if (SUCIO && !(await confirmar('Hay cambios sin guardar en este FRAP. ¿Descartarlos y empezar uno nuevo?', 'Descartar y nuevo'))) return;
   empezarNuevo(); pintarFormulario(); actualizarInicio(); window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+/* Sincronía entre dispositivos: el formulario en pantalla es un borrador de este equipo; si el mismo FRAP se guardó
+   desde otro (celular ↔ escritorio) se trae la versión nueva, y si hay un FRAP en curso reciente de otro equipo se ofrece continuarlo. */
+const _avisado = {};
+async function recargarDeNube(fila) {
+  delete S.dc[REC.id]; const d = await Datos.abrir(REC.id); if (!d) return;
+  REC.act = fila.actualizado_en;
+  if (JSON.stringify(d) === JSON.stringify(F)) return;
+  F = JSON.parse(JSON.stringify(d)); F.tomas = F.tomas?.length ? F.tomas : [{}]; F.lesiones = F.lesiones || []; F.meds = F.meds || [];
+  Object.assign(REC, { estatus: fila.estatus, folio: fila.folio || REC.folio, autor: fila.autor || REC.autor });
+  const y = window.scrollY; guardarBorrador(); pintarFormulario(); actualizarInicio(); window.scrollTo(0, y);
+  toast('☁ Este FRAP se actualizó desde otro dispositivo');
+}
+async function vigilarOtroDispositivo() {
+  try {
+    if (!NUBE || !F || !REC || !S.user) return;
+    const fila = REC.guardado ? S.regs.find(x => x.id === REC.id) : null;
+    if (fila && fila._nube) {
+      if (!REC.act) REC.act = fila.actualizado_en;
+      else if (fila.actualizado_en > REC.act) {
+        if (!SUCIO) { await recargarDeNube(fila); return; }
+        if (_avisado[REC.id] !== fila.actualizado_en) { _avisado[REC.id] = fila.actualizado_en; toast('Otro dispositivo guardó cambios en este FRAP. Guarda los tuyos o descártalos para ver los nuevos.', 7000); }
+        return;
+      }
+    }
+    if (SUCIO) return;
+    const corte = new Date(Date.now() - 12 * 3600e3).toISOString();
+    const base = REC.guardado ? (REC.act || '') : '';
+    const otro = S.regs.filter(r => r._nube && r.creado_por === S.user.id && r.estatus === 'borrador' && r.id !== REC.id && r.actualizado_en > base && r.actualizado_en > corte)
+      .sort((a, b) => b.actualizado_en.localeCompare(a.actualizado_en))[0];
+    if (!otro || _avisado['o:' + otro.id] === otro.actualizado_en) return;
+    _avisado['o:' + otro.id] = otro.actualizado_en;
+    const h = new Date(otro.actualizado_en).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+    const si = await confirmar(`Hay un FRAP en curso guardado desde otro dispositivo: <b>${esc(otro.folio || 'sin folio')}</b>${otro.paciente ? ' · ' + esc(otro.paciente) : ''} (${h}).<br>¿Continuar con ese aquí?`, 'Continuar con ese', 'Dejar el actual', 'FRAP en curso');
+    if (si) await abrirFRAP(otro.id);
+  } catch (e) { }
+}
 async function abrirFRAP(id) {
   const r = S.regs.find(x => x.id === id); if (!r) return;
   if (SUCIO && !(await confirmar('Hay cambios sin guardar en el FRAP en pantalla. ¿Descartarlos y abrir otro?', 'Abrir otro'))) return;
   let d; try { d = await Datos.abrir(id); } catch (e) { toast('No se pudo abrir: ' + e.message); return; }
   if (!d) { toast('Este FRAP necesita internet para abrirse'); return; }
   F = JSON.parse(JSON.stringify(d)); F.tomas = F.tomas?.length ? F.tomas : [{}]; F.lesiones = F.lesiones || []; F.meds = F.meds || [];
-  REC = { id: r.id, folio: r.folio, estatus: r.estatus, autor: r.autor, creado_por: r.creado_por, creado_en: r.creado_en, guardado: true }; SUCIO = false;
+  REC = { id: r.id, folio: r.folio, estatus: r.estatus, autor: r.autor, creado_por: r.creado_por, creado_en: r.creado_en, guardado: true, act: r.actualizado_en }; SUCIO = false;
   guardarBorrador(); cerrarPaneles(); pintarFormulario(); actualizarInicio();
   document.getElementById('form')?.scrollIntoView({ behavior: 'smooth' });
 }

@@ -427,7 +427,7 @@ async function arrancar() {
   await Datos.iniciarSesion();
   if (!cargarBorrador()) empezarNuevo();
   if (!F.tomas || !F.tomas.length) F.tomas = [{}]; F.lesiones = F.lesiones || []; F.meds = F.meds || [];
-  pintarApp(); pintarFormulario(); observarSecciones(); guardarBorrador();
+  pintarApp(); pintarFormulario(); observarSecciones(); guardarBorrador(); vigilarOtroDispositivo();
   if (!arrancar.hecho) {
     arrancar.hecho = true; arrancarSondeo();
     document.addEventListener('click', e => { if (e.target.closest('#form')) manejarClick(e); else manejarGlobal(e); });

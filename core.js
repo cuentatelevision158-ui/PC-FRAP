@@ -319,7 +319,7 @@ function pintarSync() {
 }
 function arrancarSondeo() {
   if (!NUBE) return;
-  const tic = async () => { if (document.hidden || !S.user) return; try { await Datos.sincronizar(false); if (typeof refrescarVistas === 'function') refrescarVistas(); } catch (e) { if (e.status === 401) { Auth.salir(); location.reload(); } pintarSync(); } };
+  const tic = async () => { if (document.hidden || !S.user) return; try { await Datos.sincronizar(false); if (typeof refrescarVistas === 'function') refrescarVistas(); if (typeof vigilarOtroDispositivo === 'function') vigilarOtroDispositivo(); } catch (e) { if (e.status === 401) { Auth.salir(); location.reload(); } pintarSync(); } };
   setInterval(tic, 30000);
   window.addEventListener('online', () => { S.online = true; tic(); });
   window.addEventListener('offline', () => { S.online = false; S.sync = 'off'; pintarSync(); });
