@@ -461,3 +461,6 @@ mark.pend{background:#ffe9b8;color:#8a4b00;padding:0 4px;border-radius:4px;font-
 /* ===== varios pacientes en un servicio ===== */
 .hermanos{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.hermanos small{width:100%;font-weight:800;letter-spacing:.04em;color:#143a8f;font-size:11px}
 .hermanos .chip-t{font-size:12px;padding:6px 10px}.tg.sv{background:#e8f0ff;color:#143a8f}
+
+/* ===== exportar a la bitácora del Sistema Integral ===== */
+.aviso-mini{color:#b45309;font-size:11px}.tabla-w select{font:inherit;padding:4px 6px;border-radius:8px;border:1px solid #c9d4ea;max-width:190px}
