@@ -464,3 +464,14 @@ mark.pend{background:#ffe9b8;color:#8a4b00;padding:0 4px;border-radius:4px;font-
 
 /* ===== exportar a la bitácora del Sistema Integral ===== */
 .aviso-mini{color:#b45309;font-size:11px}.tabla-w select{font:inherit;padding:4px 6px;border-radius:8px;border:1px solid #c9d4ea;max-width:190px}
+
+/* ===== inventario y material con cantidades ===== */
+.tile-h.verde{background:#fff;color:var(--azul);border-left:6px solid #16a34a;border-radius:14px;padding:12px 16px;justify-content:flex-start;gap:12px;box-shadow:0 6px 16px #0003}.tile-h.verde .ti{background:#dcf5e8}
+.mat-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.mat-i{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;border:2px solid #d5deef;border-radius:12px;background:#fff;flex-wrap:wrap}.mat-i.on{border-color:#e8650d;background:#fff6ef}.mat-i.falta{border-color:#dc2626}
+.mat-n{display:flex;flex-direction:column;font-weight:700;color:#143a8f;font-size:14px}.mat-n small{font-weight:600;font-size:11px;color:#64748b}.mat-n small.bajo{color:#b45309}
+.mat-c{display:flex;align-items:center;gap:4px}.mat-c button{width:34px;height:34px;border-radius:10px;border:0;background:#143a8f;color:#fff;font-size:20px;font-weight:800}.mat-c input{width:58px;height:34px;text-align:center;border:1px solid #c9d4ea;border-radius:10px;font:700 15px inherit}
+.mat-w{flex-basis:100%;color:#b91c1c;font-size:11.5px;font-style:normal}
+.inv-res{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}.inv-res span{color:#64748b;font-size:12px}.inv-alerta{color:#b45309}.inv-bien{color:#15803d}
+.inv-t td{vertical-align:middle}.inv-n{font-size:18px}.inv-chip{padding:3px 9px;border-radius:999px;font-size:11px;font-weight:800}.inv-chip.ok{background:#dcfce7;color:#166534}.inv-chip.bajo{background:#fef3c7;color:#92400e}.inv-chip.no{background:#fee2e2;color:#991b1b}.inv-chip.off{background:#e5e7eb;color:#4b5563}
+.inv-ac{white-space:nowrap}.inv-ac .btn{margin-left:4px;padding:6px 10px;font-size:12px}.inv-mas{color:#15803d}.inv-menos{color:#b91c1c}
